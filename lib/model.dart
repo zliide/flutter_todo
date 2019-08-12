@@ -11,5 +11,11 @@ class Task {
 
   static List<Task> get tasks => _tasks;
 
+  static List<Task> get currentTasks =>
+      _tasks.where((task) => !task.completed).toList();
+
+  static List<Task> get completedTasks =>
+      _tasks.where((task) => task.completed).toList();
+
   Task(this.name, this.details);
 }

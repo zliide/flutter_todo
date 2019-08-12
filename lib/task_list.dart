@@ -14,6 +14,19 @@ class _TaskListViewState extends State<TaskListView> {
     });
   }
 
+  Widget _listTile(Task task) {
+    return ListTile(
+      leading: IconButton(
+        icon: (task.completed)
+            ? Icon(Icons.check_circle)
+            : Icon(Icons.radio_button_unchecked),
+        onPressed: () => toggleTask(task),
+      ),
+      title: Text(task.name),
+      subtitle: (task.details != null) ? Text(task.details) : null,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,17 +35,7 @@ class _TaskListViewState extends State<TaskListView> {
       ),
       body: ListView(
         children: <Widget>[
-          for (final task in Task.tasks)
-            ListTile(
-              leading: IconButton(
-                icon: (task.completed)
-                    ? Icon(Icons.check_circle)
-                    : Icon(Icons.radio_button_unchecked),
-                onPressed: () => toggleTask(task),
-              ),
-              title: Text(task.name),
-              subtitle: (task.details != null) ? Text(task.details) : null,
-            ),
+          for (final task in Task.tasks) _listTile(task),
         ],
       ),
     );
