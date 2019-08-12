@@ -23,6 +23,15 @@ class _TaskDialogState extends State<TaskDialog> {
     return Scaffold(
       appBar: AppBar(
         title: Text('New Task'),
+        actions: <Widget>[
+          FlatButton(
+            child: Text(
+              'SAVE',
+              style: theme.textTheme.body1.copyWith(color: Colors.white),
+            ),
+            onPressed: _save,
+          ),
+        ],
       ),
       body: Form(
         child: ListView(
