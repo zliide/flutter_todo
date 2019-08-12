@@ -17,14 +17,20 @@ class _TaskListViewState extends State<TaskListView> {
     });
   }
 
-  void _addTask() {
-    Navigator.push(
+  void _addTask() async {
+    final task = await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => TaskDialog(),
         fullscreenDialog: true,
       ),
     );
+
+    if (task != null) {
+      setState(() {
+        Task.tasks.add(task);
+      });
+    }
   }
 
   Widget _listTile(Task task) {
