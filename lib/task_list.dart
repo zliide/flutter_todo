@@ -2,7 +2,18 @@ import 'package:flutter/material.dart';
 
 import 'model.dart';
 
-class TaskListView extends StatelessWidget {
+class TaskListView extends StatefulWidget {
+  @override
+  _TaskListViewState createState() => _TaskListViewState();
+}
+
+class _TaskListViewState extends State<TaskListView> {
+  void toggleTask(Task task) {
+    setState(() {
+      task.completed = !task.completed;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,7 +28,7 @@ class TaskListView extends StatelessWidget {
                 icon: (task.completed)
                     ? Icon(Icons.check_circle)
                     : Icon(Icons.radio_button_unchecked),
-                onPressed: null,
+                onPressed: () => toggleTask(task),
               ),
               title: Text(task.name),
               subtitle: (task.details != null) ? Text(task.details) : null,
