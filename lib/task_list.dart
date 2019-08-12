@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'model.dart';
+import 'task_dialog.dart';
 
 class TaskListView extends StatefulWidget {
   @override
@@ -10,10 +11,20 @@ class TaskListView extends StatefulWidget {
 class _TaskListViewState extends State<TaskListView> {
   final GlobalKey<State> _completedKey = GlobalKey<State>();
 
-  void toggleTask(Task task) {
+  void _toggleTask(Task task) {
     setState(() {
       task.completed = !task.completed;
     });
+  }
+
+  void _addTask() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => TaskDialog(),
+        fullscreenDialog: true,
+      ),
+    );
   }
 
   Widget _listTile(Task task) {
@@ -22,7 +33,7 @@ class _TaskListViewState extends State<TaskListView> {
         icon: (task.completed)
             ? Icon(Icons.check_circle)
             : Icon(Icons.radio_button_unchecked),
-        onPressed: () => toggleTask(task),
+        onPressed: () => _toggleTask(task),
       ),
       title: Text(task.name),
       subtitle: (task.details != null) ? Text(task.details) : null,
@@ -47,6 +58,9 @@ class _TaskListViewState extends State<TaskListView> {
             ],
           )
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _addTask,
       ),
     );
   }
