@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'model.dart';
@@ -15,6 +18,60 @@ class _TaskListViewState extends State<TaskListView> {
     setState(() {
       task.completed = !task.completed;
     });
+  }
+
+  void _deleteTask(Task task) async {
+    final confirmed = (Platform.isIOS)
+        ? await showCupertinoDialog<bool>(
+            context: context,
+            builder: (context) => CupertinoAlertDialog(
+              title: const Text('Delete Task?'),
+              content: const Text('This task will be permanently deleted.'),
+              actions: <Widget>[
+                CupertinoDialogAction(
+                  child: const Text('Delete'),
+                  isDestructiveAction: true,
+                  onPressed: () {
+                    Navigator.of(context).pop(true);
+                  },
+                ),
+                CupertinoDialogAction(
+                  child: const Text('Cancel'),
+                  isDefaultAction: true,
+                  onPressed: () {
+                    Navigator.of(context).pop(false);
+                  },
+                ),
+              ],
+            ),
+          )
+        : await showDialog<bool>(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: const Text('Delete Task?'),
+              content: const Text('This task will be permanently deleted.'),
+              actions: <Widget>[
+                FlatButton(
+                  child: const Text("CANCEL"),
+                  onPressed: () {
+                    Navigator.of(context).pop(false);
+                  },
+                ),
+                FlatButton(
+                  child: const Text("DELETE"),
+                  onPressed: () {
+                    Navigator.of(context).pop(true);
+                  },
+                ),
+              ],
+            ),
+          );
+
+    if (confirmed ?? false) {
+      setState(() {
+        Task.tasks.remove(task);
+      });
+    }
   }
 
   void _addTask() async {
@@ -43,6 +100,10 @@ class _TaskListViewState extends State<TaskListView> {
       ),
       title: Text(task.name),
       subtitle: (task.details != null) ? Text(task.details) : null,
+      trailing: IconButton(
+        icon: Icon(Icons.delete_forever),
+        onPressed: () => _deleteTask(task),
+      ),
     );
   }
 
@@ -66,6 +127,7 @@ class _TaskListViewState extends State<TaskListView> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
         onPressed: _addTask,
       ),
     );
