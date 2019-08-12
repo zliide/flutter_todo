@@ -8,6 +8,8 @@ class TaskListView extends StatefulWidget {
 }
 
 class _TaskListViewState extends State<TaskListView> {
+  final GlobalKey<State> _completedKey = GlobalKey<State>();
+
   void toggleTask(Task task) {
     setState(() {
       task.completed = !task.completed;
@@ -35,7 +37,15 @@ class _TaskListViewState extends State<TaskListView> {
       ),
       body: ListView(
         children: <Widget>[
-          for (final task in Task.tasks) _listTile(task),
+          for (final task in Task.currentTasks) _listTile(task),
+          Divider(),
+          ExpansionTile(
+            key: _completedKey,
+            title: Text('Completed (${Task.completedTasks.length})'),
+            children: <Widget>[
+              for (final task in Task.completedTasks) _listTile(task),
+            ],
+          )
         ],
       ),
     );
